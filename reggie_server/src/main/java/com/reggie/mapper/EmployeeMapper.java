@@ -1,6 +1,8 @@
 package com.reggie.mapper;
 
 import com.github.pagehelper.Page;
+import com.reggie.annotation.AutoFill;
+import com.reggie.constant.AutoFillConstant;
 import com.reggie.dto.EmployeePageQueryDTO;
 import com.reggie.entity.Employee;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,6 +18,7 @@ public interface EmployeeMapper {
     Employee getByUserName(String username);
 
     // 插入数据
+    @AutoFill(type = AutoFillConstant.INSERT)
     void insert(Employee employee);
 
     // 分页查询
@@ -27,6 +30,8 @@ public interface EmployeeMapper {
     Employee getById(Long id);
 
     // 根据id修改员工信息
+
+    @AutoFill(type = AutoFillConstant.UPDATE)
     void update(Employee employee);
 
 }
