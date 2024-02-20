@@ -5,6 +5,7 @@ import com.reggie.dto.CategoryPageQueryDTO;
 import com.reggie.result.PageResult;
 import com.reggie.result.R;
 import com.reggie.service.CategoryService;
+import com.sun.org.apache.regexp.internal.RE;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +58,16 @@ public class CategoryController {
         PageResult pageResult = categoryService.pageQuery(categoryPageQueryDTO);
 
         return R.success(pageResult);
+    }
+
+
+    @DeleteMapping
+    @ApiOperation("删除分类")
+    public R<String> deleteById(Long id) {
+
+        log.info("删除分类:{}", id);
+        categoryService.deleteById(id);
+        return R.success();
     }
 
 }

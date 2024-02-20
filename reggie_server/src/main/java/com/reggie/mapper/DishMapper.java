@@ -8,14 +8,12 @@ import com.reggie.entity.Category;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface CategoryMapper {
+public interface DishMapper {
 
-
-    @AutoFill(type = AutoFillConstant.INSERT)
-    void insert(Category category);
-
-    Page<Category> pageQuery(CategoryPageQueryDTO categoryPageQueryDTO);
-
-    // 根据id删除分类
-    void deleteById(Long id);
+    /**
+     * 根据分类id查询菜品数量
+     * @param categoryId
+     * @return
+     */
+    Integer countByCategoryId(Long categoryId);
 }

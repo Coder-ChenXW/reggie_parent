@@ -21,9 +21,10 @@
         order by sort asc , create_time desc
     </select>
 
-    <!--<delete id="deleteById">-->
-    <!--    delete-->
-    <!--    from category-->
-    <!--    where id = #{id};-->
-    <!--</delete>-->
+    <delete id="deleteById">
+        delete
+        from category
+        where id = #{id};
+    </delete>
+
 </mapper>
