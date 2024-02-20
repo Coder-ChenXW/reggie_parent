@@ -1,10 +1,13 @@
 package com.reggie.config;
 
 import com.reggie.interceptor.JwtTokenAdminInterceptor;
+import com.reggie.json.JacksonObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
@@ -17,6 +20,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Author: ChenXW
@@ -66,4 +70,20 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
 
     }
+
+    // 扩展mvc框架的消息转换器
+    @Override
+    protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+
+        log.info("开始扩展消息转换器...");
+
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+
+        // 设置对象转换器
+        converter.setObjectMapper(new JacksonObjectMapper());
+
+        converters.add(0, converter);
+
+    }
+
 }

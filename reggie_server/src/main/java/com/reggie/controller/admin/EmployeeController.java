@@ -3,8 +3,10 @@ package com.reggie.controller.admin;
 import com.reggie.constant.JwtClaimsConstant;
 import com.reggie.dto.EmployeeDTO;
 import com.reggie.dto.EmployeeLoginDTO;
+import com.reggie.dto.EmployeePageQueryDTO;
 import com.reggie.entity.Employee;
 import com.reggie.properties.JwtProperties;
+import com.reggie.result.PageResult;
 import com.reggie.result.R;
 import com.reggie.service.EmployeeService;
 import com.reggie.utils.JwtUtil;
@@ -114,6 +116,59 @@ public class EmployeeController {
 
         employeeService.save(employeeDTO);
 
+        return R.success();
+    }
+
+    /**
+     * @description: 员工分页查询
+     * @author: ChenXW
+     * @date: 2024/2/20 12:41
+     */
+    @ApiOperation("员工分页查询")
+    @GetMapping("/page")
+    public R<PageResult> page(EmployeePageQueryDTO employeePageQueryDTO){
+
+        log.info("员工分页查询:{}",employeePageQueryDTO);
+
+        PageResult pageResult =  employeeService.pageQuery(employeePageQueryDTO);
+
+
+        return R.success(pageResult);
+    }
+
+
+    /**
+     * @description: 启用禁用员工账户
+     * @author: ChenXW
+     * @date: 2024/2/20 14:06
+     */
+    @ApiOperation("启用禁用员工账户")
+    @PostMapping("/status/{status}")
+    public R<String> startOrStop(@PathVariable Integer status,Long id){
+
+        log.info("启用禁用员工账户:{},{}",status,id);
+
+        employeeService.startOrStop(status,id);
+
+        return R.success();
+    }
+
+    @ApiOperation("根据id查询员工")
+    @GetMapping("/{id}")
+    public R<Employee> getById(@PathVariable Long id){
+        return R.success(employeeService.getById(id));
+    }
+
+    /**
+     * @description: 编辑员工信息
+     * @author: ChenXW
+     * @date: 2024/2/20 14:36
+     */
+    @ApiOperation("编辑员工信息")
+    @PutMapping
+    public R<String> update(@RequestBody EmployeeDTO employeeDTO){
+        log.info("编辑员工:{}",employeeDTO);
+        employeeService.update(employeeDTO);
         return R.success();
     }
 
