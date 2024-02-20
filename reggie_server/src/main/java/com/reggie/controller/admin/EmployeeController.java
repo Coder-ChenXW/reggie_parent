@@ -17,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -98,6 +100,20 @@ public class EmployeeController {
     @PostMapping("/logout")
     @ApiOperation("员工退出")
     public R<String> logout() {
+        return R.success();
+    }
+
+    /**
+     * @description: 新增员工
+     * @author: ChenXW
+     * @date: 2024/2/20 9:43
+     */
+    @PostMapping
+    public R<String> add(@RequestBody EmployeeDTO employeeDTO) {
+        log.info("新增员工:{}", employeeDTO);
+
+        employeeService.save(employeeDTO);
+
         return R.success();
     }
 
