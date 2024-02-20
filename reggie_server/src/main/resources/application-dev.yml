@@ -13,9 +13,9 @@ reggie:
     password: 123456
   alioss:
     endpoint: oss-cn-beijing.aliyuncs.com
-    access-key-id: xxx
-    access-key-secret: yyy
-    bucket-name: reggie-itcast
+    access-key-id: LTAI5t7Y6HWWaV1RYiFArW2T
+    access-key-secret: BQ8JcCg9G1iw7pDMnPk5JrwBSDLqU7
+    bucket-name: tanhuacouldplatform
   wechat:
     appid: xxx
     secret: yyy
