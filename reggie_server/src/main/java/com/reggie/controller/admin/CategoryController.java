@@ -1,15 +1,14 @@
 package com.reggie.controller.admin;
 
 import com.reggie.dto.CategoryDTO;
+import com.reggie.dto.CategoryPageQueryDTO;
+import com.reggie.result.PageResult;
 import com.reggie.result.R;
 import com.reggie.service.CategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -42,6 +41,22 @@ public class CategoryController {
         categoryService.save(categoryDTO);
 
         return R.success();
+    }
+
+    /**
+     * @description: 分类分页查询
+     * @author: ChenXW
+     * @date: 2024/2/20 22:42
+     */
+    @ApiOperation("分类分页查询")
+    @GetMapping("/page")
+    public R<PageResult> page(CategoryPageQueryDTO categoryPageQueryDTO) {
+
+        log.info("分页查询:{}", categoryPageQueryDTO);
+
+        PageResult pageResult = categoryService.pageQuery(categoryPageQueryDTO);
+
+        return R.success(pageResult);
     }
 
 }

@@ -1,9 +1,13 @@
 package com.reggie.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.reggie.constant.StatusConstant;
 import com.reggie.dto.CategoryDTO;
+import com.reggie.dto.CategoryPageQueryDTO;
 import com.reggie.entity.Category;
 import com.reggie.mapper.CategoryMapper;
+import com.reggie.result.PageResult;
 import com.reggie.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -35,4 +39,15 @@ public class CategoryServiceImpl implements CategoryService {
         categoryMapper.insert(category);
 
     }
+
+    @Override
+    public PageResult pageQuery(CategoryPageQueryDTO categoryPageQueryDTO) {
+
+        PageHelper.startPage(categoryPageQueryDTO.getPage(), categoryPageQueryDTO.getPageSize());
+
+        Page<Category> page = categoryMapper.pageQuery(categoryPageQueryDTO);
+
+        return new PageResult(page.getTotal(), page.getResult());
+    }
+
 }
