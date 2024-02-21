@@ -10,6 +10,10 @@ spring:
       url: jdbc:mysql://${reggie.datasource.host}:${reggie.datasource.port}/${reggie.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
       username: ${reggie.datasource.username}
       password: ${reggie.datasource.password}
+  redis:
+    host: ${reggie.redis.host}
+    port: ${reggie.redis.port}
+    database: ${reggie.redis.database}
 
 mybatis:
   #mapper配置文件

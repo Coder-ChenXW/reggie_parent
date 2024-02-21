@@ -9,8 +9,7 @@ reggie:
   redis:
     host: localhost
     port: 6379
-    database: 5
-    password: 123456
+    database: 0
   alioss:
     endpoint: oss-cn-beijing.aliyuncs.com
     access-key-id: LTAI5t7Y6HWWaV1RYiFArW2T

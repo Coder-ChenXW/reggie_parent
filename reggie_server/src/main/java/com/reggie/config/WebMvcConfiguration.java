@@ -44,7 +44,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     }
 
     @Bean
-    public Docket docket() {
+    public Docket docket1() {
         log.info("准备生成接口文档...");
         ApiInfo apiInfo = new ApiInfoBuilder()
                 .title("瑞吉外卖项目文档")
@@ -52,9 +52,29 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .description("瑞吉外卖项目接口文档")
                 .build();
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("商家管理端接口")
                 .apiInfo(apiInfo)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.reggie.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.reggie.controller.admin"))
+                .paths(PathSelectors.any())
+                .build();
+
+        return docket;
+    }
+
+    @Bean
+    public Docket docket2() {
+        log.info("准备生成接口文档...");
+        ApiInfo apiInfo = new ApiInfoBuilder()
+                .title("瑞吉外卖项目文档")
+                .version("2.0")
+                .description("瑞吉外卖项目接口文档")
+                .build();
+        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("C端用户端接口 ")
+                .apiInfo(apiInfo)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.reggie.controller.user"))
                 .paths(PathSelectors.any())
                 .build();
 
