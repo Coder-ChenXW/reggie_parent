@@ -1,5 +1,6 @@
 package com.reggie.mapper;
 
+import com.reggie.entity.SetmealDish;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -12,6 +13,18 @@ public interface SetmealDishMapper {
      * @param ids
      * @return
      */
-    List<Long> getSemtealIdsByDishIds(List<Long> ids);
+    List<Long> getSetmealIdsByDishIds(List<Long> ids);
+
+    /**
+     * 批量保存套餐和菜品的关联关系
+     * @param setmealDishes
+     */
+    void insertBatch(List<SetmealDish> setmealDishes);
+
+    /**
+     * 根据套餐id删除套餐和菜品的关联关系
+     * @param setmealId
+     */
+    void deleteBySetmealId(Long setmealId);
 
 }

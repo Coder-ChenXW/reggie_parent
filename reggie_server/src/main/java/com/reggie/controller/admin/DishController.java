@@ -2,6 +2,7 @@ package com.reggie.controller.admin;
 
 import com.reggie.dto.DishDTO;
 import com.reggie.dto.DishPageQueryDTO;
+import com.reggie.entity.Dish;
 import com.reggie.result.PageResult;
 import com.reggie.result.R;
 import com.reggie.service.DishService;
@@ -97,5 +98,28 @@ public class DishController {
         dishService.updateWithFlavor(dishDTO);
         return R.success();
     }
+    /**
+     * 菜品起售、停售
+     * @param status
+     * @param id
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    @ApiOperation("菜品起售、停售")
+    public R<String> startOrStop(@PathVariable Integer status, Long id){
+        dishService.startOrStop(status,id);
+        return R.success();
+    }
 
+    /**
+     * 根据分类id查询菜品
+     * @param categoryId
+     * @return
+     */
+    @GetMapping("/list")
+    @ApiOperation("根据分类id查询菜品")
+    public R<List<Dish>> list(Long categoryId){
+        List<Dish> list = dishService.list(categoryId);
+        return R.success(list);
+    }
 }
