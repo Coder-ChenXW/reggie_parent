@@ -1,6 +1,7 @@
 package com.reggie.config;
 
 import com.reggie.interceptor.JwtTokenAdminInterceptor;
+import com.reggie.interceptor.JwtTokenUserInterceptor;
 import com.reggie.json.JacksonObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +36,19 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     @Resource
     private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
 
+    @Autowired
+    private JwtTokenUserInterceptor jwtTokenUserInterceptor;
+
     @Override
     protected void addInterceptors(InterceptorRegistry registry) {
         log.info("开始注册自定义拦截器:{}", jwtTokenAdminInterceptor);
         registry.addInterceptor(jwtTokenAdminInterceptor)
                 .addPathPatterns("/admin/**")
                 .excludePathPatterns("/admin/employee/login");
+
+        registry.addInterceptor(jwtTokenUserInterceptor)
+                .addPathPatterns("/user/**")
+                .excludePathPatterns("/user/user/login");
     }
 
     @Bean

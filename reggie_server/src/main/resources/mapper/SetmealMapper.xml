@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.reggie.mapper.SetmealMapper">
-
-    <resultMap id="setmealAndDishMap" type="com.reggie.vo.SetmealVO" autoMapping="true">
+    <resultMap id="setmealAndDishMap" type="com.reggie.vo.SetmealVO">
         <result column="id" property="id"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="name" property="name"/>
+        <result column="price" property="price"/>
+        <result column="status" property="status"/>
+        <result column="description" property="description"/>
+        <result column="image" property="image"/>
+        <result column="update_time" property="updateTime"/>
         <collection property="setmealDishes" ofType="SetmealDish">
             <result column="sd_id" property="id"/>
             <result column="setmeal_id" property="setmealId"/>
@@ -15,9 +20,13 @@
         </collection>
     </resultMap>
 
-    <select id="countByCategoryId" resultType="java.lang.Integer">
-        select count(id) from setmeal where category_id = #{categoryId}
-    </select>
+    <insert id="insert" parameterType="Setmeal" useGeneratedKeys="true" keyProperty="id">
+        insert into setmeal
+        (category_id,name,price,status,description,image,create_time,update_time,create_user,update_user)
+        values
+            (#{categoryId},#{name},#{price},#{status},#{description},#{image},#{createTime},#{updateTime},#{createUser},#{updateUser})
+    </insert>
+
 
     <update id="updateStatusByIds" parameterType="map">
         update setmeal set status = #{status}
@@ -26,65 +35,6 @@
             #{id}
         </foreach>
     </update>
-
-
-    <insert id="insert" parameterType="Setmeal" useGeneratedKeys="true" keyProperty="id">
-        insert into setmeal
-        (category_id, name, price, status, description, image, create_time, update_time, create_user, update_user)
-        values (#{categoryId}, #{name}, #{price}, #{status}, #{description}, #{image}, #{createTime}, #{updateTime},
-                #{createUser}, #{updateUser})
-    </insert>
-
-    <select id="pageQuery" resultType="com.reggie.vo.SetmealVO">
-        select
-        s.*,c.name categoryName
-        from
-        setmeal s
-        left join
-        category c
-        on
-        s.category_id = c.id
-        <where>
-            <if test="name != null">
-                and s.name like concat('%',#{name},'%')
-            </if>
-            <if test="status != null">
-                and s.status = #{status}
-            </if>
-            <if test="categoryId != null">
-                and s.category_id = #{categoryId}
-            </if>
-        </where>
-        order by s.create_time desc
-    </select>
-
-    <select id="getById" parameterType="long" resultType="Setmeal">
-        select *
-        from setmeal
-        where id = #{id}
-    </select>
-
-    <delete id="deleteById" parameterType="long">
-        delete
-        from setmeal
-        where id = #{id}
-    </delete>
-
-    <select id="getByIdWithDish" parameterType="long" resultMap="setmealAndDishMap">
-        select a.*,
-               b.id    sd_id,
-               b.setmeal_id,
-               b.dish_id,
-               b.name  sd_name,
-               b.price sd_price,
-               b.copies
-        from setmeal a
-                 left join
-             setmeal_dish b
-             on
-                 a.id = b.setmeal_id
-        where a.id = #{id}
-    </select>
 
     <update id="update" parameterType="Setmeal">
         update setmeal
@@ -121,6 +71,54 @@
         update setmeal set status = #{status} where id = #{id}
     </update>
 
+    <select id="countByCategoryId" resultType="java.lang.Long">
+        select count(id) from setmeal where category_id = #{categoryId}
+    </select>
+
+    <select id="pageQuery" resultType="com.reggie.vo.SetmealVO">
+        select
+        s.*,c.name categoryName
+        from
+        setmeal s
+        left join
+        category c
+        on
+        s.category_id = c.id
+        <where>
+            <if test="name != null">
+                and s.name like '%${name}%'
+            </if>
+            <if test="status != null">
+                and s.status = #{status}
+            </if>
+            <if test="categoryId != null">
+                and s.category_id = #{categoryId}
+            </if>
+        </where>
+        order by s.create_time desc
+    </select>
+
+    <select id="getById" parameterType="long" resultType="Setmeal">
+        select * from setmeal where id = #{id}
+    </select>
+
+    <delete id="deleteById" parameterType="long">
+        delete from setmeal where id = #{id}
+    </delete>
+
+    <select id="getByIdWithDish" parameterType="long" resultMap="setmealAndDishMap">
+        select
+            a.*,b.id sd_id,b.setmeal_id,b.dish_id,b.name sd_name,b.price sd_price,b.copies
+        from
+            setmeal a
+                left join
+            setmeal_dish b
+            on
+                a.id = b.setmeal_id
+        where
+            a.id = #{id}
+    </select>
+
     <select id="list" parameterType="Setmeal" resultType="Setmeal">
         select * from setmeal
         <where>
@@ -135,5 +133,5 @@
             </if>
         </where>
     </select>
-</mapper>
 
+</mapper>

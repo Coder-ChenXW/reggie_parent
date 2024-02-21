@@ -18,38 +18,54 @@ public interface DishMapper {
 
     /**
      * 根据分类id查询菜品数量
-     *
      * @param categoryId
      * @return
      */
     Integer countByCategoryId(Long categoryId);
 
     /**
-     * @description: 插入菜品数据
-     * @author: ChenXW
-     * @date: 2024/2/21 10:39
+     * 插入菜品数据
+     * @param dish
      */
     @AutoFill(type = AutoFillConstant.INSERT)
     void insert(Dish dish);
 
+    /**
+     * 菜品分页查询
+     * @param dishPageQueryDTO
+     * @return
+     */
     Page<DishVO> pageQuery(DishPageQueryDTO dishPageQueryDTO);
 
-    // 根据主键查询菜品数据
+    /**
+     * 根据主键查询菜品数据
+     * @param id
+     * @return
+     */
     Dish getById(Long id);
 
-    // 根据主键删除菜品数据
+    /**
+     * 根据主键删除菜品数据
+     * @param id
+     */
     void deleteById(Long id);
 
-    // 根据id查询菜品和关联的口味数据
+    /**
+     * 根据id查询菜品和关联的口味数据
+     * @param id
+     * @return
+     */
     DishVO getByIdWithFlavor(Long id);
 
-    // 根据主键修改菜品信息
+    /**
+     * 根据主键修改菜品信息
+     * @param dish
+     */
     @AutoFill(type = AutoFillConstant.UPDATE)
     void update(Dish dish);
 
     /**
      * 修改菜品状态
-     *
      * @param status
      * @param id
      */
@@ -57,7 +73,6 @@ public interface DishMapper {
 
     /**
      * 动态条件查询菜品
-     *
      * @param dish
      * @return
      */
@@ -65,7 +80,6 @@ public interface DishMapper {
 
     /**
      * 根据套餐id查询菜品
-     *
      * @param setmealId
      * @return
      */
@@ -73,7 +87,6 @@ public interface DishMapper {
 
     /**
      * 动态条件查询菜品和口味
-     *
      * @param dish
      * @return
      */
@@ -81,7 +94,6 @@ public interface DishMapper {
 
     /**
      * 根据套餐id查询菜品选项
-     *
      * @param setmealId
      * @return
      */

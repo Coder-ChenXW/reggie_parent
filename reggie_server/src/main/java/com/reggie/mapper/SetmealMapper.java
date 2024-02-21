@@ -15,17 +15,18 @@ import java.util.Map;
 public interface SetmealMapper {
 
     /**
-     * 根据分类id查询套餐的数量
-     * @param id
+     * 根据分类id查询套餐数量
+     *
+     * @param categoryId
      * @return
      */
-    Integer countByCategoryId(Long id);
+    Integer countByCategoryId(Long categoryId);
 
     /**
      * 修改套餐状态
-     * @param map
+     * @param mapSetmeal
      */
-    void updateStatusByIds(Map map);
+    void updateStatusByIds(Map mapSetmeal);
 
     /**
      * 新增套餐
@@ -67,7 +68,7 @@ public interface SetmealMapper {
      * @param setmeal
      */
     @AutoFill(type = AutoFillConstant.UPDATE)
-    void update(Setmeal setmeal);
+    public void update(Setmeal setmeal);
 
     /**
      * 根据id修改套餐状态

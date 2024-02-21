@@ -16,13 +16,13 @@ import com.reggie.mapper.SetmealDishMapper;
 import com.reggie.mapper.SetmealMapper;
 import com.reggie.result.PageResult;
 import com.reggie.service.SetmealService;
-import com.reggie.vo.DishItemVO;
 import com.reggie.vo.SetmealVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.reggie.vo.DishItemVO;
 import java.util.List;
 
 /**
@@ -31,7 +31,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class SetmealServiceImpl implements SetmealService {
-
     @Autowired
     private SetmealMapper setmealMapper;
     @Autowired
@@ -61,6 +60,7 @@ public class SetmealServiceImpl implements SetmealService {
 
         //保存套餐和菜品的关联关系
         setmealDishMapper.insertBatch(setmealDishes);
+
     }
 
     /**
@@ -106,8 +106,27 @@ public class SetmealServiceImpl implements SetmealService {
      * @return
      */
     public SetmealVO getByIdWithDish(Long id) {
+
+        /**
+         * 方式一：一条sql搞定 select a.*,b.* from setmeal a left join setmeal_dish b on a.id = b.setmeal_id where a.id = 2;
+         * 方式二：分步骤查询
+         */
+
         SetmealVO setmealVO = setmealMapper.getByIdWithDish(id);
         return setmealVO;
+
+        /*//查询套餐表
+        Setmeal setmeal = setmealMapper.getById(id);
+
+        //查询套餐菜品关系表
+        List<SetmealDish> setmealDishes = setmealDishMapper.getBySetmealId(id);
+
+        //封装对象
+        SetmealVO setmealVO = new SetmealVO();
+        BeanUtils.copyProperties(setmeal,setmealVO);
+        setmealVO.setSetmealDishes(setmealDishes);
+
+        return setmealVO;*/
     }
 
     /**
@@ -155,6 +174,7 @@ public class SetmealServiceImpl implements SetmealService {
                 });
             }
         }
+
         setmealMapper.updateStatusById(status,id);
     }
 
@@ -167,8 +187,8 @@ public class SetmealServiceImpl implements SetmealService {
         List<Setmeal> list = setmealMapper.list(setmeal);
         return list;
     }
-
-    /**
+	
+	/**
      * 根据id查询菜品选项
      * @param id
      * @return

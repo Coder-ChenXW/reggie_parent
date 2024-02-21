@@ -1,76 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.reggie.mapper.DishMapper">
 
-    <resultMap id="dishAndFlavorMap" type="com.reggie.vo.DishVO" autoMapping="true">
-        <id column="id" property="id"></id>
+    <resultMap id="dishAndFlavorMap" type="com.reggie.vo.DishVO">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="price" property="price"/>
+        <result column="image" property="image"/>
+        <result column="description" property="description"/>
+        <result column="status" property="status"/>
+        <result column="update_time" property="updateTime"/>
+
         <collection property="flavors" ofType="DishFlavor">
-            <result column="dfName" property="name"/>
+            <result column="fname" property="name"/>
             <result column="value" property="value"/>
         </collection>
     </resultMap>
 
-    <select id="countByCategoryId" resultType="java.lang.Integer">
-        select count(id)
-        from dish
-        where category_id = #{categoryId}
-    </select>
-
     <!--
-        useGeneratedKeys:true 表示获取主键值
-        keyProperty="id" 表示将主键值赋给哪个属性
+        useGeneratedKeys设置为true：在执行插入记录之后可以获取到数据库自动生成的主键值
+        keyProperty：指定Java对象的属性名
     -->
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        insert into dish (status, name, category_id, price, image, description, create_time, update_time, create_user,
-                          update_user)
-        VALUES (#{status}, #{name}, #{categoryId}, #{price}, #{image}, #{description}, #{createTime}, #{updateTime},
-                #{createUser}, #{updateUser})
+    <insert id="insert" parameterType="Dish" useGeneratedKeys="true" keyProperty="id">
+        insert into dish
+        (name,category_id,price,image,description,status,create_time,update_time,create_user,update_user)
+        values
+            (#{name},#{categoryId},#{price},#{image},#{description},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser})
     </insert>
 
-    <select id="pageQuery" resultType="com.reggie.vo.DishVO">
-        select d.*,c.name categoryName from dish d left join category c on d.category_id = c.id
-        <where>
-            <if test="name != null">
-                and d.name like concat('%',#{name},'%')
-            </if>
-            <if test="categoryId != null">
-                and d.category_id = #{categoryId}
-            </if>
-            <if test="status != null">
-                and d.status = #{status}
-            </if>
-        </where>
-        order by d.create_time desc
-    </select>
-
-    <select id="getById" resultType="com.reggie.entity.Dish">
-        select *
-        from dish
-        where id = #{id}
-    </select>
-
-    <delete id="deleteById">
-        delete
-        from dish
-        where id = #{id}
-    </delete>
-
-    <select id="getByIdWithFlavor" resultMap="dishAndFlavorMap">
-        select d.*, df.name dfName, df.value
-        from dish d
-                 left join dish_flavor df on d.id = df.dish_id
-        where d.id = #{id}
-    </select>
-
-    <update id="update">
+    <update id="update" parameterType="Dish">
         update dish
         <set>
-            <if test="name != null">
-                name = #{name},
-            </if>
             <if test="categoryId != null">
                 category_id = #{categoryId},
+            </if>
+            <if test="name != null">
+                name = #{name},
             </if>
             <if test="price != null">
                 price = #{price},
@@ -88,23 +54,64 @@
                 update_time = #{updateTime},
             </if>
             <if test="updateUser != null">
-                update_user = #{updateUser},
+                update_user = #{updateUser}
             </if>
         </set>
         where id = #{id}
     </update>
 
     <update id="updateStatusById">
-        update dish
-        set status = #{status}
-        where id = #{id}
+        update dish set status = #{status} where id = #{id}
     </update>
+
+    <delete id="deleteById">
+        delete from dish where id = #{id}
+    </delete>
+
+    <select id="countByCategoryId" resultType="java.lang.Long">
+        select count(id) from dish where category_id = #{categoryId}
+    </select>
+
+    <select id="pageQuery" resultType="com.reggie.vo.DishVO">
+        select d.*,c.name as categoryName
+        from dish d
+        left join category c
+        on d.category_id = c.id
+        <where>
+            <if test="name != null and name != ''">
+                and d.name like '%${name}%'
+            </if>
+            <if test="categoryId != null">
+                and d.category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and d.status = #{status}
+            </if>
+        </where>
+        order by d.create_time desc
+    </select>
+    <select id="getById" resultType="Dish">
+        select * from dish where id = #{id}
+    </select>
+
+    <select id="getByIdWithFlavor" resultMap="dishAndFlavorMap">
+        select
+            a.*,b.name fname,b.value
+        from
+            dish a
+                left join
+            dish_flavor b
+            on
+                a.id = b.dish_id
+        where
+            a.id = #{id}
+    </select>
 
     <select id="list" resultType="Dish" parameterType="Dish">
         select * from dish
         <where>
             <if test="name != null">
-                and name like concat('%',#{name},'%')
+                and name like '%${name}%'
             </if>
             <if test="categoryId != null">
                 and category_id = #{categoryId}
@@ -117,15 +124,12 @@
     </select>
 
     <select id="getBySetmealId" resultType="Dish">
-        select a.*
-        from dish a
-                 left join setmeal_dish b on a.id = b.dish_id
-        where b.setmeal_id = #{setmealId}
+        select a.* from dish a left join setmeal_dish b on a.id = b.dish_id where b.setmeal_id = #{setmealId}
     </select>
 
     <select id="listWithFlavor" parameterType="Dish" resultMap="dishAndFlavorMap">
         select
-        a.*,b.name dfName,b.value
+        a.*,b.name fname,b.value
         from
         dish a
         left join

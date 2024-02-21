@@ -16,5 +16,5 @@ reggie:
     access-key-secret: BQ8JcCg9G1iw7pDMnPk5JrwBSDLqU7
     bucket-name: tanhuacouldplatform
   wechat:
-    appid: xxx
-    secret: yyy
+    appid: wx356d477c0c55505f
+    secret: 76e86651a16eaa1a11c3c6a8c8267ee7

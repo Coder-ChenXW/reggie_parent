@@ -10,18 +10,36 @@ import java.util.List;
 
 public interface DishService {
 
-    // 新增菜品
+    /**
+     * 新增菜品，同时需要保存菜品关联的口味
+     * @param dishDTO
+     */
     void saveWithFlavor(DishDTO dishDTO);
 
-    PageResult pageQuery(DishPageQueryDTO dishPageQueryDTO);
+    /**
+     * 菜品分页查询
+     * @param pageQueryDTO
+     * @return
+     */
+    PageResult pageQuery(DishPageQueryDTO pageQueryDTO);
 
-    // 菜品的批量删除
+    /**
+     * 批量删除菜品
+     * @param ids
+     */
     void deleteBatch(List<Long> ids);
 
-    // 根据id查询菜品和关联的口味数据
+    /**
+     * 根据id查询菜品和关联的口味
+     * @param id
+     * @return
+     */
     DishVO getByIdWithFlavor(Long id);
 
-    // 根据id修改菜品和关联的口味
+    /**
+     * 修改菜品和关联的口味
+     * @param dishDTO
+     */
     void updateWithFlavor(DishDTO dishDTO);
 
     /**
