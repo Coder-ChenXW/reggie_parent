@@ -10,10 +10,13 @@ import com.reggie.vo.DishVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author: ChenXW
@@ -31,6 +34,9 @@ public class DishController {
     @Resource
     private DishService dishService;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     /**
      * @description: 新增菜品
      * @author: ChenXW
@@ -41,6 +47,11 @@ public class DishController {
     public R<String> add(@RequestBody DishDTO dishDTO) {
         log.info("新增菜品:{}", dishDTO);
         dishService.saveWithFlavor(dishDTO);
+
+        Long categoryId = dishDTO.getCategoryId();
+        String key = "dish_" + categoryId;
+        cleanCache(key);
+
         return R.success();
     }
 
@@ -71,6 +82,8 @@ public class DishController {
         log.info("菜品批量删除:{}", ids);
         dishService.deleteBatch(ids);
 
+        cleanCache("dish_*");
+
         return R.success();
     }
 
@@ -96,30 +109,51 @@ public class DishController {
     public R<String> update(@RequestBody DishDTO dishDTO) {
         log.info("修改菜品:{}", dishDTO);
         dishService.updateWithFlavor(dishDTO);
+
+        cleanCache("dish_*");
+
         return R.success();
     }
+
     /**
      * 菜品起售、停售
+     *
      * @param status
      * @param id
      * @return
      */
     @PostMapping("/status/{status}")
     @ApiOperation("菜品起售、停售")
-    public R<String> startOrStop(@PathVariable Integer status, Long id){
-        dishService.startOrStop(status,id);
+    public R<String> startOrStop(@PathVariable Integer status, Long id) {
+        dishService.startOrStop(status, id);
+
+        cleanCache("dish_*");
+
         return R.success();
     }
 
     /**
      * 根据分类id查询菜品
+     *
      * @param categoryId
      * @return
      */
     @GetMapping("/list")
     @ApiOperation("根据分类id查询菜品")
-    public R<List<Dish>> list(Long categoryId){
+    public R<List<Dish>> list(Long categoryId) {
         List<Dish> list = dishService.list(categoryId);
         return R.success(list);
     }
+
+
+    /**
+     * @description: 清理缓存
+     * @author: ChenXW
+     * @date: 2024/2/22 11:33
+     */
+    public void cleanCache(String pattern){
+        Set keys = redisTemplate.keys(pattern);
+        redisTemplate.delete(keys);
+    }
+
 }
