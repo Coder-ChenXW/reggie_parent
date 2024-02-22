@@ -68,7 +68,7 @@
         delete from dish where id = #{id}
     </delete>
 
-    <select id="countByCategoryId" resultType="java.lang.Long">
+    <select id="countByCategoryId" resultType="java.lang.Integer">
         select count(id) from dish where category_id = #{categoryId}
     </select>
 
@@ -90,7 +90,7 @@
         </where>
         order by d.create_time desc
     </select>
-    <select id="getById" resultType="Dish">
+    <select id="getById" resultType="com.reggie.entity.Dish">
         select * from dish where id = #{id}
     </select>
 
@@ -160,5 +160,17 @@
              on
                  sd.dish_id = d.id
         where sd.setmeal_id = #{setmealId}
+    </select>
+
+    <select id="countByMap" resultType="java.lang.Integer">
+        select count(id) from dish
+        <where>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+        </where>
     </select>
 </mapper>

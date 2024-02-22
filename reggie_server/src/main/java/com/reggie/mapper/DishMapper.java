@@ -12,6 +12,7 @@ import com.reggie.vo.DishVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface DishMapper {
@@ -98,4 +99,6 @@ public interface DishMapper {
      * @return
      */
     List<DishItemVO> getDishItemBySetmealId(Long setmealId);
+
+    Integer countByMap(Map map);
 }

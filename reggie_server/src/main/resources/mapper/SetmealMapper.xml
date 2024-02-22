@@ -71,7 +71,7 @@
         update setmeal set status = #{status} where id = #{id}
     </update>
 
-    <select id="countByCategoryId" resultType="java.lang.Long">
+    <select id="countByCategoryId" resultType="java.lang.Integer">
         select count(id) from setmeal where category_id = #{categoryId}
     </select>
 
@@ -98,7 +98,7 @@
         order by s.create_time desc
     </select>
 
-    <select id="getById" parameterType="long" resultType="Setmeal">
+    <select id="getById" parameterType="long" resultType="com.reggie.entity.Setmeal">
         select * from setmeal where id = #{id}
     </select>
 
@@ -119,7 +119,7 @@
             a.id = #{id}
     </select>
 
-    <select id="list" parameterType="Setmeal" resultType="Setmeal">
+    <select id="list" parameterType="Setmeal" resultType="com.reggie.entity.Setmeal">
         select * from setmeal
         <where>
             <if test="name != null">
@@ -130,6 +130,18 @@
             </if>
             <if test="status != null">
                 and status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <select id="countByMap" resultType="java.lang.Integer">
+        select count(id) from setmeal
+        <where>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
             </if>
         </where>
     </select>
