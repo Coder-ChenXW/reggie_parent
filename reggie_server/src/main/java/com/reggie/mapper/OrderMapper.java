@@ -48,4 +48,11 @@ public interface OrderMapper {
 
 
     List<Orders> getByStatusAndOrdertimeLT(Integer status, LocalDateTime orderTime);
+
+    /**
+     * 根据状态统计订单数量
+     * @param status
+     * @return
+     */
+    Integer countStatus(Integer status);
 }

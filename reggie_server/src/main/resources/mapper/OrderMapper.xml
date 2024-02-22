@@ -83,4 +83,9 @@
         select * from orders where status = #{status} and order_time &lt; #{orderTime}
     </select>
 
+    <select id="countStatus" resultType="java.lang.Integer">
+        select count(id) from orders where status = #{status}
+    </select>
+
+
 </mapper>
