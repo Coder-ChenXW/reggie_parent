@@ -1,6 +1,7 @@
 package com.reggie.mapper;
 
 import com.github.pagehelper.Page;
+import com.reggie.dto.GoodsSalesDTO;
 import com.reggie.entity.Orders;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -60,5 +61,7 @@ public interface OrderMapper {
     Double sumByMap(Map map);
 
     Integer countByMap(Map map);
+
+    List<GoodsSalesDTO> getSalesTop10(LocalDateTime begin, LocalDateTime end);
 
 }
